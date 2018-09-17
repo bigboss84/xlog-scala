@@ -13,11 +13,12 @@ import it.russoft.xlog.Level.{Info, Level}
   * @param duration Total execution duration, expressed in millis.
   * @param logs     Sequence of registered logs.
   */
-case class Execution
+case class Execution[T]
 (
   level: Level,
   duration: Long,
-  logs: Seq[Log]
+  logs: Seq[Log],
+  obj: T
 )
 
 /**
@@ -59,13 +60,13 @@ object Execution {
     * @return Returns an [[Execution]] object that summarize
     *         the execution of your defined code block.
     */
-  def execution(block: Context => Unit): Execution = {
+  def execution[T](block: Context => T): Execution[T] = {
     val c = new Context
 
     val startMs = currentTimeMillis
-    block(c)
+    val r = block(c)
     val endMs = currentTimeMillis
 
-    Execution(c.level, endMs - startMs, c.logs)
+    Execution(c.level, endMs - startMs, c.logs, r)
   }
 }

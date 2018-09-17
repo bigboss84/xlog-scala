@@ -86,4 +86,13 @@ class ExecutionTest extends FlatSpec with Matchers {
   "x3.log(1).trace" should "be Some(nerd-details)" in {
     x3.logs(1).trace shouldEqual Some("nerd-details")
   }
+
+  private val x4 = execution[Int] { c =>
+    c.info("i-message")
+    7
+  }
+
+  "x4.obj" should "be equal to 7" in {
+    x4.obj shouldEqual 7
+  }
 }
