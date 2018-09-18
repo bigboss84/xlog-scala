@@ -69,4 +69,65 @@ object Execution {
 
     Execution(c.level, endMs - startMs, c.logs, r)
   }
+
+  /**
+    * Makes info execution with single message.
+    * @param m Info message.
+    * @param o Boxed object.
+    * @tparam T Type of the boxed object.
+    * @return Returns an [[Execution]] object that wraps
+    *         the object in `o` parameter.
+    */
+  def info[T](m: String, o: T): Execution[T] = {
+    execution[T] { c =>
+      c.info(m)
+      o
+    }
+  }
+
+  /**
+    * Makes success execution with single message.
+    * @param m Success message.
+    * @param o Boxed object.
+    * @tparam T Type of the boxed object.
+    * @return Returns an [[Execution]] object that wraps
+    *         the object in `o` parameter.
+    */
+  def success[T](m: String, o: T): Execution[T] = {
+    execution[T] { c =>
+      c.success(m)
+      o
+    }
+  }
+
+  /**
+    * Makes warning execution with single message.
+    * @param m Warning message.
+    * @param o Boxed object.
+    * @tparam T Type of the boxed object.
+    * @return Returns an [[Execution]] object that wraps
+    *         the object in `o` parameter.
+    */
+  def warning[T](m: String, o: T): Execution[T] = {
+    execution[T] { c =>
+      c.warning(m)
+      o
+    }
+  }
+
+  /**
+    * Makes error execution with single message.
+    * @param m Error message.
+    * @param o Boxed object.
+    * @tparam T Type of the boxed object.
+    * @return Returns an [[Execution]] object that wraps
+    *         the object in `o` parameter.
+    */
+  def error[T](m: String, o: T): Execution[T] = {
+    execution[T] { c =>
+      c.error(m)
+      o
+    }
+  }
+
 }

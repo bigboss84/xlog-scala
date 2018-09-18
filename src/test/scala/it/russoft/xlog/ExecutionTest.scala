@@ -2,8 +2,8 @@ package it.russoft.xlog
 
 import java.lang.Thread.sleep
 
-import it.russoft.xlog.Execution.execution
-import it.russoft.xlog.Level.{Error, Info, Success}
+import it.russoft.xlog.Execution._
+import it.russoft.xlog.Level.{Error, Info, Warning, Success}
 import org.scalatest.{FlatSpec, Matchers}
 
 /**
@@ -95,4 +95,89 @@ class ExecutionTest extends FlatSpec with Matchers {
   "x4.obj" should "be equal to 7" in {
     x4.obj shouldEqual 7
   }
+
+  //
+  // single info execution
+  //
+  private val ix = Execution.info[Map[String, String]]("i-message", Map("ik" -> "iv"))
+
+  "ix.level" should "be equal to Level.Error" in {
+    ix.level shouldEqual Info
+  }
+
+  "ix.logs" should "have size one" in {
+    ix.logs.length shouldEqual 1
+  }
+
+  "ix.logs.head.message" should "be equal to 'i-message'" in {
+    ix.logs.head.message shouldEqual "i-message"
+  }
+
+  "ix.obj('ik')" should "be equal to 'iv'" in {
+    ix.obj("ik") shouldEqual "iv"
+  }
+
+  //
+  // single success execution
+  //
+  private val sx = Execution.success[Map[String, String]]("s-message", Map("sk" -> "sv"))
+
+  "sx.level" should "be equal to Level.Success" in {
+    sx.level shouldEqual Success
+  }
+
+  "sx.logs" should "have size one" in {
+    sx.logs.length shouldEqual 1
+  }
+
+  "sx.logs.head.message" should "be equal to 's-message'" in {
+    sx.logs.head.message shouldEqual "s-message"
+  }
+
+  "sx.obj('sk')" should "be equal to 'sv'" in {
+    sx.obj("sk") shouldEqual "sv"
+  }
+
+  //
+  // single warning execution
+  //
+  private val wx = Execution.warning[Map[String, String]]("w-message", Map("wk" -> "wv"))
+
+  "wx.level" should "be equal to Level.Warning" in {
+    wx.level shouldEqual Warning
+  }
+
+  "wx.logs" should "have size one" in {
+    wx.logs.length shouldEqual 1
+  }
+
+  "wx.logs.head.message" should "be equal to 'w-message'" in {
+    wx.logs.head.message shouldEqual "w-message"
+  }
+
+  "wx.obj('wk')" should "be equal to 'wv'" in {
+    wx.obj("wk") shouldEqual "wv"
+  }
+
+  //
+  // single error execution
+  //
+  private val ex = Execution.error[Map[String, String]]("e-message", Map("ek" -> "ev"))
+
+  "ex.level" should "be equal to Level.Error" in {
+    ex.level shouldEqual Error
+  }
+
+  "ex.logs" should "have size one" in {
+    ex.logs.length shouldEqual 1
+  }
+
+  "ex.logs.head.message" should "be equal to 'e-message'" in {
+    ex.logs.head.message shouldEqual "e-message"
+  }
+
+  "ex.obj('ek')" should "be equal to 'ev'" in {
+    ex.obj("ek") shouldEqual "ev"
+  }
+
 }
