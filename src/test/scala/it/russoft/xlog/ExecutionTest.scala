@@ -14,6 +14,7 @@ class ExecutionTest extends FlatSpec with Matchers {
   private val x1 = execution { c =>
     c.info("i-message")
     sleep(3)
+    None
   }
 
   "x1.level" should "be equal to Level.Info" in {
@@ -43,6 +44,7 @@ class ExecutionTest extends FlatSpec with Matchers {
   private val x2 = execution { c =>
     c.info("i-message")
     c.success("s-message", Some("nerd-details"))
+    None
   }
 
   "x2.level" should "be equal to Level.Success" in {
@@ -65,6 +67,7 @@ class ExecutionTest extends FlatSpec with Matchers {
     c.info("i-message")
     c.error("e-message", Some("nerd-details"))
     c.success("s-message")
+    None
   }
 
   "x3.level" should "be equal to Level.Error" in {
@@ -89,17 +92,17 @@ class ExecutionTest extends FlatSpec with Matchers {
 
   private val x4 = execution[Int] { c =>
     c.info("i-message")
-    7
+    Some(7)
   }
 
   "x4.obj" should "be equal to 7" in {
-    x4.obj shouldEqual 7
+    x4.obj.get shouldEqual 7
   }
 
   //
   // single info execution
   //
-  private val ix = Execution.info[Map[String, String]]("i-message", Map("ik" -> "iv"))
+  private val ix = Execution.info[Map[String, String]]("i-message", Some(Map("ik" -> "iv")))
 
   "ix.level" should "be equal to Level.Error" in {
     ix.level shouldEqual Info
@@ -114,13 +117,13 @@ class ExecutionTest extends FlatSpec with Matchers {
   }
 
   "ix.obj('ik')" should "be equal to 'iv'" in {
-    ix.obj("ik") shouldEqual "iv"
+    ix.obj.get("ik") shouldEqual "iv"
   }
 
   //
   // single success execution
   //
-  private val sx = Execution.success[Map[String, String]]("s-message", Map("sk" -> "sv"))
+  private val sx = Execution.success[Map[String, String]]("s-message", Some(Map("sk" -> "sv")))
 
   "sx.level" should "be equal to Level.Success" in {
     sx.level shouldEqual Success
@@ -135,13 +138,13 @@ class ExecutionTest extends FlatSpec with Matchers {
   }
 
   "sx.obj('sk')" should "be equal to 'sv'" in {
-    sx.obj("sk") shouldEqual "sv"
+    sx.obj.get("sk") shouldEqual "sv"
   }
 
   //
   // single warning execution
   //
-  private val wx = Execution.warning[Map[String, String]]("w-message", Map("wk" -> "wv"))
+  private val wx = Execution.warning[Map[String, String]]("w-message", Some(Map("wk" -> "wv")))
 
   "wx.level" should "be equal to Level.Warning" in {
     wx.level shouldEqual Warning
@@ -156,13 +159,13 @@ class ExecutionTest extends FlatSpec with Matchers {
   }
 
   "wx.obj('wk')" should "be equal to 'wv'" in {
-    wx.obj("wk") shouldEqual "wv"
+    wx.obj.get("wk") shouldEqual "wv"
   }
 
   //
   // single error execution
   //
-  private val ex = Execution.error[Map[String, String]]("e-message", Map("ek" -> "ev"))
+  private val ex = Execution.error[Map[String, String]]("e-message", Some(Map("ek" -> "ev")))
 
   "ex.level" should "be equal to Level.Error" in {
     ex.level shouldEqual Error
@@ -177,7 +180,7 @@ class ExecutionTest extends FlatSpec with Matchers {
   }
 
   "ex.obj('ek')" should "be equal to 'ev'" in {
-    ex.obj("ek") shouldEqual "ev"
+    ex.obj.get("ek") shouldEqual "ev"
   }
 
 }

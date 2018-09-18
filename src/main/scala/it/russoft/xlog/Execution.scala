@@ -12,13 +12,14 @@ import it.russoft.xlog.Level.{Info, Level}
   * @param level    Maximum registered log level.
   * @param duration Total execution duration, expressed in millis.
   * @param logs     Sequence of registered logs.
+  * @param obj      Boxed object of type `T`
   */
 case class Execution[T]
 (
   level: Level,
   duration: Long,
   logs: Seq[Log],
-  obj: T
+  obj: Option[T] = None
 )
 
 /**
@@ -60,7 +61,7 @@ object Execution {
     * @return Returns an [[Execution]] object that summarize
     *         the execution of your defined code block.
     */
-  def execution[T](block: Context => T): Execution[T] = {
+  def execution[T](block: Context => Option[T]): Execution[T] = {
     val c = new Context
 
     val startMs = currentTimeMillis
@@ -78,7 +79,7 @@ object Execution {
     * @return Returns an [[Execution]] object that wraps
     *         the object in `o` parameter.
     */
-  def info[T](m: String, o: T): Execution[T] = {
+  def info[T](m: String, o: Option[T] = None): Execution[T] = {
     execution[T] { c =>
       c.info(m)
       o
@@ -93,7 +94,7 @@ object Execution {
     * @return Returns an [[Execution]] object that wraps
     *         the object in `o` parameter.
     */
-  def success[T](m: String, o: T): Execution[T] = {
+  def success[T](m: String, o: Option[T] = None): Execution[T] = {
     execution[T] { c =>
       c.success(m)
       o
@@ -108,7 +109,7 @@ object Execution {
     * @return Returns an [[Execution]] object that wraps
     *         the object in `o` parameter.
     */
-  def warning[T](m: String, o: T): Execution[T] = {
+  def warning[T](m: String, o: Option[T] = None): Execution[T] = {
     execution[T] { c =>
       c.warning(m)
       o
@@ -123,7 +124,7 @@ object Execution {
     * @return Returns an [[Execution]] object that wraps
     *         the object in `o` parameter.
     */
-  def error[T](m: String, o: T): Execution[T] = {
+  def error[T](m: String, o: Option[T] = None): Execution[T] = {
     execution[T] { c =>
       c.error(m)
       o
